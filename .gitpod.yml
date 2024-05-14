@@ -1,2 +1,14 @@
 image:
   file: .gitpod.Dockerfile
+ports:
+  - port: 8000
+    onOpen: open-preview
+
+tasks:
+  - init: docker compose up -d --wait
+    command: symfony server:start -d --no-tls
+
+vscode:
+  extensions:
+    - felixfbecker.php-debug
+    - bmewburn.vscode-intelephense-client
