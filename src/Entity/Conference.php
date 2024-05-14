@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
-class Conference
+class Conference implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,6 +35,11 @@ class Conference
         $this->comments = new ArrayCollection();
     }
 
+    public function __toString(): string
+       {
+            return $this->city.' '.$this->year;
+        }
+        
     public function getId(): ?int
     {
         return $this->id;
