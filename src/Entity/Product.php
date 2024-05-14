@@ -26,6 +26,11 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'category_products')]
     private ?Category $Product_Category = null;
 
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
