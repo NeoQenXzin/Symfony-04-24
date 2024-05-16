@@ -2,24 +2,38 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment implements \Stringable
 {
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $author = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Email]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
@@ -39,9 +53,9 @@ class Comment implements \Stringable
     }
 
     public function __toString(): string
-        {
-            return (string) $this->getEmail();
-        }
+    {
+        return (string) $this->getEmail();
+    }
     public function getAuthor(): ?string
     {
         return $this->author;
@@ -112,5 +126,10 @@ class Comment implements \Stringable
         $this->photoFilename = $photoFilename;
 
         return $this;
+    }
+    
+    public static function setFilename(UploadedFile $photo) : string 
+    {
+        return bin2hex(random_bytes(6)).'.'.$photo->guessExtension();
     }
 }
