@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait CreatedAtTrait
 {
-
     #[ORM\Column(options: ['default' => 'now()'])]
     private ?\DateTimeImmutable $createdAt = null;
 

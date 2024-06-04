@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\CommentRepository;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -56,6 +55,7 @@ class Comment implements \Stringable
     {
         return (string) $this->getEmail();
     }
+
     public function getAuthor(): ?string
     {
         return $this->author;
@@ -127,8 +127,8 @@ class Comment implements \Stringable
 
         return $this;
     }
-    
-    public static function setFilename(UploadedFile $photo) : string 
+
+    public static function setFilename(UploadedFile $photo): string
     {
         return bin2hex(random_bytes(6)).'.'.$photo->guessExtension();
     }

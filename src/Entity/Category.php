@@ -33,6 +33,7 @@ class Category
     {
         return (string) $this->getName();
     }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use App\Entity\Conference;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -19,7 +19,6 @@ class CommentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Comment::class);
     }
-
 
     public function getCommentPaginator(Conference $conference, int $offset): Paginator
     {

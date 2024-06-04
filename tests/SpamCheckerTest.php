@@ -2,13 +2,13 @@
 
 namespace App\Tests;
 
-use App\SpamChecker;
 use App\Entity\Comment;
-use PHPUnit\Framework\TestCase;
+use App\SpamChecker;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class SpamCheckerTest extends TestCase
 {
@@ -21,9 +21,6 @@ class SpamCheckerTest extends TestCase
         static::expectExceptionMessage('Unable to check for spam: invalid (Invalid key).');
         $checker->getSpamScore(comment: $comment, context: []);
     }
-
-
-
 
     // 3 test grace au dataprovider de php unit on lie la function provideComments ou se trouve les 3 parametre de test.
     #[DataProvider('provideComments')]
