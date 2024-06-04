@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\SpamChecker;
 use Twig\Environment;
 use App\Entity\Comment;
 use App\Entity\Conference;
@@ -41,7 +42,7 @@ class ConferenceController extends AbstractController
     #[Route('/conference/{slug}', name: 'conference')]
     // public function show(Environment $twig, Conference $conference, CommentRepository $commentRepository): Response
     // public function show(Request $request, Environment $twig, Conference $conference, CommentRepository $commentRepository): Response
-    public function show(Request $request, Conference $conference, CommentRepository $commentRepository, ConferenceRepository $conferenceRepository,  #[Autowire('%photo_dir%')] string $photoDir,): Response
+    public function show(Request $request, Conference $conference, CommentRepository $commentRepository, ConferenceRepository $conferenceRepository, SpamChecker $spamChecker, #[Autowire('%photo_dir%')] string $photoDir,): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
@@ -62,6 +63,20 @@ class ConferenceController extends AbstractController
             }
 
             $this->entityManager->persist($comment);
+
+
+
+            $context = [
+                'user_ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('user-agent'),
+                'referrer' => $request->headers->get('referer'),
+                'permalink' => $request->getUri(),
+            ];
+            if (2 === $spamChecker->getSpamScore($comment, $context)) {
+                throw new \RuntimeException('Blatant spam, go away!');
+            }
+
+
             $this->entityManager->flush();
 
             return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
