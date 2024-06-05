@@ -22,7 +22,7 @@ phpstan:
 	APP_ENV=dev symfony php vendor/bin/phpstan analyse --level max
 
 bdd:
-	symfony run psql
+	docker compose exec database psql app app
 
 bddtest:
 	docker compose exec database psql app_test app
